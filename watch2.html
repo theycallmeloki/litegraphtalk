@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="litegraph.css" />
+    <script type="text/javascript" src="litegraph.js"></script>
+  </head>
+  <body style="width: 100%; height: 100%">
+    <br />
+    <canvas
+      id="mycanvas"
+      width="1000"
+      height="500"
+      style="border: 1px solid"
+    ></canvas>
+    <script>
+      var graph = new LGraph();
+
+      var canvas = new LGraphCanvas("#mycanvas", graph);
+
+      class ConstantNode extends LGraphNode {
+        constructor() {
+          super();
+          this.addOutput("value", "number");
+          this.addProperty("value", 1.0);
+          this.widget = this.addWidget("number", "value", 1, "value");
+          this.widgets_up = true;
+          this.size = [180, 30];
+          this.title = "Const Number";
+          this.desc = "Constant Number";
+        }
+
+        onExecute() {
+          this.setOutputData(0, parseFloat(this.properties["value"]));
+        }
+
+        setValue(v) {
+          this.setProperty("value", v);
+        }
+
+        onDrawBackground(ctx) {
+          //show the current value
+          this.outputs[0].label = this.properties["value"].toFixed(3);
+        }
+      }
+
+      class WatchNode extends LGraphNode {
+        constructor() {
+          super();
+          this.size = [60, 30];
+          this.addInput("value", 0, { label: "" });
+          this.value = 0;
+          this.title = "Watch";
+          this.desc = "Show value of input";
+        }
+
+        onExecute() {
+          if (this.inputs[0]) {
+            this.value = this.getInputData(0);
+          }
+        }
+
+        toString(o) {
+          if (o == null) {
+            return "null";
+          } else if (o.constructor === Number) {
+            return o.toFixed(3);
+          } else {
+            return String(o);
+          }
+        }
+
+        onDrawBackground(ctx) {
+          //show the current value
+          this.inputs[0].label = this.toString(this.value);
+        }
+      }
+
+      LiteGraph.registerNodeType("basic/const", ConstantNode);
+      LiteGraph.registerNodeType("basic/watch", WatchNode);
+
+      const nodeConst1 = LiteGraph.createNode("basic/const");
+      nodeConst1.pos = [200, 200];
+      graph.add(nodeConst1);
+      nodeConst1.setValue(4.5);
+
+      const nodeWatch = LiteGraph.createNode("basic/watch");
+      nodeWatch.pos = [700, 200];
+      graph.add(nodeWatch);
+
+      nodeConst1.connect(0, nodeWatch, 0);
+
+      graph.start();
+    </script>
+  </body>
+</html>

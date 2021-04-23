@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="litegraph.css" />
+    <script type="text/javascript" src="litegraph.js"></script>
+    <link
+      rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css"
+    />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body style="width: 100%; height: 100%">
+    <div style="height: 550px; overflow-x: hidden; overflow-y: auto">
+      <pre>
+        <code class="javascript">LiteGraph.registerNodeType("basic/const", ConstantNode);
+// where "basic/const" is the registered name of the Node, 
+// you can refer to this node with this Name in the next step
+
+const nodeConst1 = LiteGraph.createNode("basic/const");
+// createNode creates a Node of type "basic/const"
+nodeConst1.pos = [200, 200];
+// pos determines the placement of the Node in the Graph
+graph.add(nodeConst1);
+// Add the newly created Node to the Graph
+nodeConst1.setValue(4.5);
+// Set a starting value of 4.5 to the Node
+
+graph.start()</code>
+    </pre>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,194 @@
+LiteGraph.js
+23 April 2021
+
+Lokesh Poovaragan (Loki)
+hiloki.me / theycallmeloki
+
+* 
+
+.background loki.png
+
+
+*  Background
+
+- There are times when you want to expose functionality to an *underlying* *system* in a way that lets power *Users* quickly *connect* and *layer* primitives together to accomplish a *complex* task that doesn't involve pulling out your IDE and writing *Logic* or *Markup*, in such cases, a *Visual* *Programming* *Editor* is helpful, lets take a look at a few examples,
+
+	- Blender 
+		- Material Editor
+		- Game Logic Editor
+		- Compositor
+
+	- Unreal Engine
+		- Blueprint Editor
+
+	- NodeRed
+		- IoT Devices - Data Flow
+
+
+*  Blender (Compositor)
+
+.image blender.jpg 500 1000
+
+
+*  Unreal Engine (Blueprint Editor)
+
+.image unreal.png 500 800
+
+
+*  NodeRed (IoT Devices Workflow)
+
+.image nodered.png 500 _
+
+
+* LiteGraph.js
+
+*LiteGraph.js* is one such library that allows you to create a Visual Programming Editor in *Javascript*:
+
+- Renders on Canvas2D (Renders everywhere a browser can)
+
+- Callbacks to personalize every intent, action, drawing and event of Nodes
+
+- Node-ception (Nodes that contain nodes themselves)
+
+- Easy to integrate with a Frontend framework like React, Angular or Vue, etc (single file, no dependencies)
+
+- Easy to extend and monkey-patch for custom use-cases
+
+- Live mode (Allows for Server Side use-cases of listening to Message Passing Interfaces such as Kafka Streams and PubSub channels, by running Nodes on Node.js) 
+
+
+* Install LiteGraph.js
+
+	Steps to install LiteGraph.js:
+
+	- npm install litegraph.js 
+	- Link litegraph.css as a stylesheet (!Important) 
+	- Link litegraph.js as a script
+	- Initialize a Graph (The logical container on which you can add Nodes)
+	- Initialize a Canvas (The actual canvas that holds LiteGraph)
+	- Begin registering and drawing your Nodes
+
+.html base_sk.html
+
+* Empty Graph
+
+.iframe base.html 550 1000
+
+* 
+
+Let's look at the steps required to make a Node 
+
+To create a Node that can output a Number:
+
+- Create a class that extends `LGraphNode` 
+
+- Override the class's methods depending on what specific action you want the Node to be able to perform, in the case that we want to output a number, we want to overrride: 
+
+	- constructor (to initialize the Node with some instance values, like size, title, description)
+	- onExecute (this is run everytime the Node is activated, when its connected to another Node)
+	- setValue (to set the Constant number that is inside the Node)
+	- onDrawBackground (to show the value held by the Node)
+
+* Constant Node Definition
+
+.html reg_sk.html
+
+* 
+
+- Next, register the Node class with LiteGraph to begin using it
+
+- Once you have registered a Node, add the Node to the Graph previously created to interact with it
+
+- Start the graph with `graph.start()` to begin processing the Graph
+
+.html reg2_sk.html
+
+*  Add Constant Node
+
+.iframe reg2.html 550 1000
+
+*  
+
+Let's add another Node that let's you view the value that's available in the first Node we created
+
+- Create a `WatchNode` 
+
+- Read input data that is available on the incoming slot of the Node, stringifying it if neccassary
+
+- Display it on the Node
+
+In this case, the same functions as before as overridden, with the addition of: 
+
+	- toString (a utility function that reads incoming data from an input slot)
+
+* Watch Node Definition
+
+.html watch_sk.html
+
+*  
+
+- Next, register the new Node and add it to the Graph
+
+- Connect the output of the Constant Node to the input of the Watch Node
+
+.html watch2_sk.html
+
+* Add Watch Node
+
+.iframe watch2.html 550 1000
+
+* 
+
+Let's create a Node that sums two inputs and outputs the result
+
+.html add_sk.html
+
+*  
+
+- Register the Add Node and add it to the graph, along with another Constant Node to test against
+
+- Connect the first Constant Node to Sum's first input slot
+
+- Connect the second Constant Node to Sum's second input slot
+
+- Connect the output of the Sum to the Watch Node
+
+.html add2_sk.html
+
+* Add Sum Node
+
+.iframe add.html 550 1000
+
+*  
+
+Let's look at a few functions that LiteGraph's Node, prototypes for you that you can Override for your specific usecase 
+
+- `serialize` - Serializes the contents of the Node so it can be sent over the wire
+- `clone` - Clones the contents of the Node
+- `getTitle` - Gets the title of the Node
+- `setProperty` - Allows you to set the property value in a Node
+- `computeSize` - Allows you to define logic that determines the outer boundary of a Node
+- `getBounding` - Allows you to get the space a Node occupies on the Graph
+
+*  You have levelled up!  
+
+You have just completed the Hello World of LiteGraph.js!
+
+.image god.png 450 450
+
+* Thank you!
+
+Special thanks to jagenjo for creating LiteGraph.js!
+
+Please post any questions you might have to our Youtube Channel!
+
+Stay tuned for interesting tech talks! 
+
+Code used in the Slides: https://github.com/theycallmeloki/litegraphtalk
+
+---
+
+Lokesh Poovaragan,
+Developer Advocate, 
+lokesh@semut.io, theycallmeloki.com
+

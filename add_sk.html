@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="litegraph.css" />
+    <script type="text/javascript" src="litegraph.js"></script>
+    <link
+      rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css"
+    />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body style="width: 100%; height: 100%">
+    <div style="height: 550px; overflow-x: hidden; overflow-y: auto">
+      <pre>
+        <code class="javascript">
+class AddNode extends LGraphNode {
+  constructor() {
+    super();
+    this.addInput("A", "number");
+    this.addInput("B", "number");
+    this.addOutput("A+B", "number");
+    this.properties = { precision: 1 };
+    this.title = "Sum";
+    this.desc = "Outputs the sum of A and B"
+  }
+
+  onExecute() {
+    const A = this.getInputData(0) || 0;
+    const B = this.getInputData(1) || 0;
+    const result = A + B;
+    this.setOutputData(0, result);
+  }
+}
+</code>
+    </pre>
+    </div>
+  </body>
+</html>

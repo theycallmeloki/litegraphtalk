@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="litegraph.css" />
+    <script type="text/javascript" src="litegraph.js"></script>
+    <link
+      rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css"
+    />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body style="width: 100%; height: 100%">
+    <div style="height: 350px; overflow-x: hidden; overflow-y: auto">
+      <pre>
+        <code class="javascript">
+LiteGraph.registerNodeType("basic/sum", AddNode);
+
+const nodeConst1 = LiteGraph.createNode("basic/const");
+nodeConst1.pos = [200, 200];
+graph.add(nodeConst1);
+nodeConst1.setValue(4.5);
+
+const nodeConst2 = LiteGraph.createNode("basic/const");
+nodeConst2.pos = [200, 500];
+graph.add(nodeConst2);
+nodeConst2.setValue(4.5);
+
+const nodeWatch = LiteGraph.createNode("basic/watch");
+nodeWatch.pos = [700, 200];
+graph.add(nodeWatch);
+
+const nodeSum = LiteGraph.createNode("basic/sum");
+nodeSum.pos = [500, 300];
+graph.add(nodeSum);
+
+nodeConst1.connect(0, nodeSum, 0);
+nodeConst2.connect(0, nodeSum, 1);
+nodeSum.connect(0, nodeWatch, 0);
+
+graph.start();
+</code>
+    </pre>
+    </div>
+  </body>
+</html>

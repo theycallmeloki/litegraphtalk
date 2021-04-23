@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="litegraph.css" />
+    <script type="text/javascript" src="litegraph.js"></script>
+    <link
+      rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css"
+    />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body style="width: 100%; height: 100%">
+    <div style="height: 550px; overflow-x: hidden; overflow-y: auto">
+      <pre>
+        <code class="javascript">
+class WatchNode extends LGraphNode {
+  constructor() {
+    super();
+    this.size = [60, 30];
+    this.addInput("value", 0, { label: "" });
+    this.value = 0;
+    this.title = "Watch";
+    this.desc = "Show value of input";
+  }
+
+  onExecute() {
+    if (this.inputs[0]) {
+      this.value = this.getInputData(0);
+    }
+  }
+
+  toString(o) {
+    if (o == null) {
+      return "null";
+    } else if (o.constructor === Number) {
+      return o.toFixed(3);
+    } else {
+      return String(o);
+    }
+  }
+
+  onDrawBackground(ctx) {
+    //show the current value
+    this.inputs[0].label = this.toString(this.value);
+  }
+}
+</code>
+    </pre>
+    </div>
+  </body>
+</html>

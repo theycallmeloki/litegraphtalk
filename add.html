@@ -1,0 +1,145 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="litegraph.css" />
+    <script type="text/javascript" src="litegraph.js"></script>
+  </head>
+  <body style="width: 100%; height: 100%">
+    <canvas
+      id="mycanvas"
+      width="1000"
+      height="550"
+      style="border: 1px solid"
+    ></canvas>
+    <script>
+      var graph = new LGraph();
+
+      var canvas = new LGraphCanvas("#mycanvas", graph);
+
+      class ConstantNode extends LGraphNode {
+        constructor() {
+          super();
+          this.addOutput("value", "number");
+          this.addProperty("value", 1.0);
+          this.widget = this.addWidget("number", "value", 1, "value");
+          this.widgets_up = true;
+          this.size = [180, 30];
+          this.title = "Const Number";
+          this.desc = "Constant Number";
+        }
+
+        onExecute() {
+          this.setOutputData(0, parseFloat(this.properties["value"]));
+        }
+
+        getTitle() {
+          if (this.flags.collapsed) {
+            return this.properties.value;
+          }
+          return this.title;
+        }
+
+        setValue(v) {
+          this.setProperty("value", v);
+        }
+
+        onDrawBackground(ctx) {
+          //show the current value
+          this.outputs[0].label = this.properties["value"].toFixed(3);
+        }
+      }
+
+      class WatchNode extends LGraphNode {
+        constructor() {
+          super();
+          this.size = [60, 30];
+          this.addInput("value", 0, { label: "" });
+          this.value = 0;
+          this.title = "Watch";
+          this.desc = "Show value of input";
+        }
+
+        onExecute() {
+          if (this.inputs[0]) {
+            this.value = this.getInputData(0);
+          }
+        }
+
+        getTitle() {
+          if (this.flags.collapsed) {
+            return this.inputs[0].label;
+          }
+          return this.title;
+        }
+
+        toString(o) {
+          if (o == null) {
+            return "null";
+          } else if (o.constructor === Number) {
+            return o.toFixed(3);
+          } else if (o.constructor === Array) {
+            var str = "[";
+            for (var i = 0; i < o.length; ++i) {
+              str += this.toString(o[i]) + (i + 1 !== o.length ? "," : "");
+            }
+            str += "]";
+            return str;
+          } else {
+            return String(o);
+          }
+        }
+
+        onDrawBackground(ctx) {
+          //show the current value
+          this.inputs[0].label = this.toString(this.value);
+        }
+      }
+
+      class AddNode extends LGraphNode {
+        constructor() {
+          super();
+          this.addInput("A", "number");
+          this.addInput("B", "number");
+          this.addOutput("A+B", "number");
+          this.properties = { precision: 1 };
+          this.title = "Sum";
+        }
+
+        onExecute() {
+          const A = this.getInputData(0) || 0;
+          const B = this.getInputData(1) || 0;
+          const result = A + B;
+          this.setOutputData(0, result);
+        }
+      }
+
+      LiteGraph.registerNodeType("basic/const", ConstantNode);
+      LiteGraph.registerNodeType("basic/watch", WatchNode);
+      LiteGraph.registerNodeType("basic/sum", AddNode);
+
+      const nodeConst1 = LiteGraph.createNode("basic/const");
+      console.log(nodeConst1);
+      nodeConst1.pos = [200, 100];
+      graph.add(nodeConst1);
+      nodeConst1.setValue(4.5);
+
+      const nodeConst2 = LiteGraph.createNode("basic/const");
+      nodeConst2.pos = [200, 400];
+      graph.add(nodeConst2);
+      nodeConst2.setValue(4.5);
+
+      const nodeWatch = LiteGraph.createNode("basic/watch");
+      nodeWatch.pos = [700, 100];
+      graph.add(nodeWatch);
+
+      const nodeSum = LiteGraph.createNode("basic/sum");
+      nodeSum.pos = [500, 200];
+      graph.add(nodeSum);
+
+      nodeConst1.connect(0, nodeSum, 0);
+      nodeConst2.connect(0, nodeSum, 1);
+      nodeSum.connect(0, nodeWatch, 0);
+
+      graph.start();
+    </script>
+  </body>
+</html>
